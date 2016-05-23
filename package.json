@@ -1,0 +1,19 @@
+{
+  "name": "krypa",
+  "version": "1.0.0",
+  "description": "Front matter sitemap generator.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "front matter",
+    "templating",
+    "recursive",
+    "crawler",
+    "sitemap",
+    "data"
+  ],
+  "author": "Mitchell Gates <ms.fragala@gmail.com>",
+  "license": "MIT"
+}
