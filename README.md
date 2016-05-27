@@ -1,5 +1,5 @@
 # krypa
-Recursively walk through a directory and construct front matter sitemap.
+Recursively walk through a directory and construct a front matter sitemap.
 
 ## Install
 ```shell
@@ -11,7 +11,7 @@ npm install krypa
 var krypa = require('krypa');
 var hm = require('hjson-matter');
 
-var sitemap = kryp('./src/pages/**/*.{html,md}', {
+var sitemap = krypa('./src/pages/**/*.{html,md}', {
   base: './src/pages',
   parser: hm
 });
