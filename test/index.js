@@ -4,12 +4,14 @@ import krypa from '../';
 import path from 'path';
 import test from 'ava';
 
-const krypare = krypa(hm);
-
 test(t => {
   const base = './pages';
   const globs = './pages/**/*.{html,md}';
-  const sitemap = krypare(globs, base);
+  const sitemap = krypa(globs, {
+    base: base,
+    parser: hm
+  });
+
   t.true(_.isEqual(sitemap, {
     index: { title: 'Home' },
     about: {
@@ -21,4 +23,5 @@ test(t => {
       projectB: { index: { title: 'Project B' } }
     }
   }));
+  
 });

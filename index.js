@@ -4,12 +4,11 @@ var read = require('fs').readFileSync;
 var traverse = require('traverse');
 var normalize = require('./lib/normalize');
 
-module.exports = function(parser) {
-  return krypa.bind(parser);
-}
+module.exports = function krypa(globs, options) {
 
-function krypa(globs, base) {
-  var parse = this;
+  var parse = options.parser || noop;
+  var base = options.base || '';
+
   var sitemap = {};
   var files = glob(globs);
   var crawler = traverse(sitemap);
@@ -23,4 +22,8 @@ function krypa(globs, base) {
 
   return sitemap;
 
+}
+
+function noop() {
+  return {};
 }
