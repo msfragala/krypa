@@ -1,5 +1,5 @@
 # krypa
-Recursively walk through a directory and construct
+Recursively walk through a directory and construct front matter sitemap.
 
 ## Install
 ```shell
