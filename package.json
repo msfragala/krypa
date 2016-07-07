@@ -27,6 +27,8 @@
   ],
   "dependencies": {
     "globby": "^4.1.0",
+    "gray-matter": "^2.0.2",
+    "is-glob": "^2.0.1",
     "traverse": "^0.6.6"
   },
   "devDependencies": {
