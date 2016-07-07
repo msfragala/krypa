@@ -1,29 +1,26 @@
-var glob = require('globby').sync;
 var Path = require('path');
-var read = require('fs').readFileSync;
-var traverse = require('traverse');
-var normalize = require('./lib/normalize');
 
-module.exports = function krypa(globs, options) {
+/**
+ * @param {string} directory - The directory to create a front-matter sitemap for.
+ * @param {Object} options - Options to pass ignore globs and a specific parser.
+ * @param {(string|string[])} options.ignore - Globs of files to ignore.
+ * @param {Function} options.parser - The function to parse the front-matter.
+ */
+function krypa(directory, options) {
 
-  var parse = options.parser || noop;
-  var base = options.base || '';
-
-  var sitemap = {};
-  var files = glob(globs);
-  var crawler = traverse(sitemap);
-  var i = 0, path, data;
-
-  for(i = 0; i < files.length; i++) {
-    path = normalize(files[i], base);
-    data = parse(read(files[i])).data;
-    crawler.set(path, data);
-  }
-
-  return sitemap;
+  var directory = ensureAbsolute(directory);
+  var parser = options.parser || require('gray-matter');
+  var ignore = options.ignore || '!**/*.{html,md}';
 
 }
 
-function noop() {
-  return {};
+
+/**
+ * @param {string} path - The path to make absolute, if not already.
+ */
+function ensureAbsolute(path) {
+  return Path.isAbsolute(path) ? path : Path.resolve(path);
 }
+
+
+module.exports = krypa;
