@@ -11,33 +11,34 @@ npm install krypa
 var krypa = require('krypa');
 var hm = require('hjson-matter');
 
-var sitemap = krypa('./src/pages/**/*.{html,md}', {
-  base: './src/pages',
+// generate a sitemap of YAML front-matter
+var sitemap = krypa('./directory');
+
+// specify your own front-matter parser
+var sitemap = krypa('./directory', hm);
+
+// pass ignore options to globby
+var sitemap = krypa('./directory', { ignore: '!**/*.md' });
+
+// pass ignore options AND a custom parser
+var sitemap = krypa('./directory', {
+  ignore: '!**/*.md',
   parser: hm
 });
-
 ```
 
-## Usage
+## Parameters
 
-### krypa(globs, options)
+#### krypa(directory, options)
 
-#### globs
+`directory` **{String}** - Path of the directory you want to generate a front matter sitemap for.
 
-Type: `string`, `array`
+`options` **{Function|Object}** - The ignore and parser options, or just `options.parser` directly.
 
-Glob or array of globs for the files to incorporate into the sitemap.
+`options.ignore` **{String|String[]}** - Glob of files to ignore to pass to [globby](https://www.npmjs.com/package/globby) (see [node-glob](https://github.com/isaacs/node-glob#options)).
 
-#### options
+_Default: `!**/*.{html,markdown,md,nunjucks,swig,twig}`_
 
-##### base
+`options.parser` **{Function}** - Custom parser to extract front-matter from files. This should return the front-matter data itself, so if your parser returns the data as an object property (such as `attributes` in [front-matter](https://github.com/jxson/front-matter)), you should create a light wrapper around it.
 
-Type: `string`
-
-The directory to serve as the starting point for the sitemap.
-
-##### parser
-
-Type: `function`
-
-The parser to extract the front matter from a file. It should return with property `data` containing the front matter.
+_Default: a light wrapper around [gray-matter](https://github.com/jonschlinkert/gray-matter)_
