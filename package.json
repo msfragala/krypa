@@ -8,6 +8,10 @@
     "publish-please": "publish-please",
     "prepublish": "publish-please guard"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/msfragala/krypa"
+  },
   "keywords": [
     "front matter",
     "templating",
