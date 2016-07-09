@@ -19,7 +19,7 @@ var traverse = require('traverse');
 function krypa(directory, options) {
 
   var directory, parser, ignore;
-  var defaultIgnore = '!**/*.{html,md}';
+  var defaultIgnore = '!**/*.{htm,html,markdown,md,nunjucks,swig,twig}';
 
   directory = ensureAbsolute(directory);
 
