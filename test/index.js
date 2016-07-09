@@ -1,15 +1,17 @@
 import _ from 'lodash';
+import fs from 'fs';
 import hm from 'hjson-matter';
 import krypa from '../';
 import path from 'path';
 import test from 'ava';
 
 test(t => {
-  const base = './pages';
-  const globs = './pages/**/*.{html,md}';
-  const sitemap = krypa(globs, {
-    base: base,
-    parser: hm
+  const directory = './pages';
+  const sitemap = krypa(directory, {
+    parser: file => {
+      var content = fs.readFileSync(file);
+      return hm(content).data;
+    }
   });
 
   t.true(_.isEqual(sitemap, {
@@ -23,5 +25,5 @@ test(t => {
       projectB: { index: { title: 'Project B' } }
     }
   }));
-  
+
 });

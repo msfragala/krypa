@@ -1,4 +1,5 @@
 var Path = require('path');
+var fs = require('fs');
 var globby = require('globby');
 var isGlob = require('is-glob');
 var traverse = require('traverse');
@@ -6,7 +7,7 @@ var traverse = require('traverse');
 /**
  * @callback ParserCallback
  * @param {string} file - Absolute path to a given file
- * @return {Object}
+ * @return {Object} The front-matter data of `file`
  */
 
 /**
@@ -18,7 +19,7 @@ var traverse = require('traverse');
 function krypa(directory, options) {
 
   var directory = ensureAbsolute(directory);
-  var parser = options.parser || require('gray-matter');
+  var parser = options.parser || defaultParser;
   var ignore = options.ignore || '!**/*.{html,md}';
 
   var sitemap = {};
@@ -27,7 +28,7 @@ function krypa(directory, options) {
   var files = findFiles(directory, ignore);
   files.forEach(function(file) {
     var path, data;
-    data = parser(file).data;
+    data = parser(file);
     path = rebase(directory, file);
     path = ensureIndex(path);
     path = path.split(Path.sep);
@@ -76,13 +77,29 @@ function rebase(base, path) {
 
 /**
  * Set the basename of a path to `index`
- * @param {string} path - The path to reindex
+ * @param {string} file - The file path to reindex
  * @return {string} The path given, now with a basename of `index`
  */
-function ensureIndex(path) {
-  var ext = Path.extname(path);
-  var base = Path.basename(path);
-  return base === 'index' ? path : Path.join(path, 'index');
+function ensureIndex(file) {
+  var path = Path.parse(file);
+  return path.name === 'index'
+    ? Path.join(path.dir, path.name)
+    : Path.join(path.dir, path.name, 'index');
+}
+
+/**
+ * @param {string} file - Path of the file to read
+ * @return {object} The front-matter data of `file`
+ */
+function defaultParser(file) {
+  var content = fs.readFileSync(file);
+  var parser = require('gray-matter');
+  try {
+    return parser(content).data;
+  } catch(err) {
+    console.warn(err);
+    return { data: {} };
+  }
 }
 
 module.exports = krypa;
