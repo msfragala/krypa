@@ -19,8 +19,12 @@ var traverse = require('traverse');
 function krypa(directory, options) {
 
   var directory = ensureAbsolute(directory);
-  var parser = options.parser || defaultParser;
-  var ignore = options.ignore || '!**/*.{html,md}';
+
+  var parser = options && options.parser
+    ? options.parser : defaultParser;
+
+  var ignore = options && options.ignore
+    ? options.ignore : '!**/*.{html,md}';
 
   var sitemap = {};
   var Sitemap = traverse(sitemap);
@@ -92,7 +96,7 @@ function ensureIndex(file) {
  * @return {object} The front-matter data of `file`
  */
 function defaultParser(file) {
-  var content = fs.readFileSync(file);
+  var content = fs.readFileSync(file).toString();
   var parser = require('gray-matter');
   try {
     return parser(content).data;
