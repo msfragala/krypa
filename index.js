@@ -12,19 +12,30 @@ var traverse = require('traverse');
 
 /**
  * @param {string} directory - The directory to reconstruct as a sitemap.
- * @param {Object} options - Options to pass ignore globs and a specific parser.
+ * @param {(Object|function)} options - Options to pass ignore globs and a specific parser, or the function to parse the front-matter.
  * @param {(string|string[])} options.ignore - Globs of files to ignore.
  * @param {Function} options.parser - The function to parse the front-matter.
  */
 function krypa(directory, options) {
 
-  var directory = ensureAbsolute(directory);
+  var directory, parser, ignore;
+  var defaultIgnore = '!**/*.{html,md}';
 
-  var parser = options && options.parser
-    ? options.parser : defaultParser;
+  directory = ensureAbsolute(directory);
 
-  var ignore = options && options.ignore
-    ? options.ignore : '!**/*.{html,md}';
+  switch (typeof options) {
+    case 'function':
+      parser = options;
+      ignore = defaultIgnore;
+      break;
+    case 'object':
+      parser = options.parser || defaultParser;
+      ignore = options.ignore || defaultIgnore;
+      break;
+    default:
+      parser = defaultParser;
+      ignore = defaultIgnore;
+  }
 
   var sitemap = {};
   var Sitemap = traverse(sitemap);
